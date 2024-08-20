@@ -1,11 +1,16 @@
-class Counter(object):
+from django.core.cache import cache
+from django.db.models.signals import m2m_changed, post_save, post_delete
+
+
+
+class CachedCount(object):
     """
     Usage:
     class MyModel(models.Model):
         bar = models.ManyToManyField(Bar)
-        foo_count = Counter("foo_set", filter=Q(foo__x__gte=10))
-        total_user_count = Counter(User.objects.all())
-        m2m_count = Counter('bar_set')
+        foo_count = CachedCount("foo_set", filter=Q(foo__x__gte=10))
+        total_user_count = CachedCount(User.objects.all())
+        m2m_count = CachedCount('bar_set')
 
     class Foo(models.Model):
         mymodel = models.ForeignKey(MyModel)
@@ -55,3 +60,4 @@ class Counter(object):
 
     def clean_cache(self, *args, **kwargs):
         cache.delete(self.name)
+
