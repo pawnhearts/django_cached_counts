@@ -24,5 +24,5 @@ setup(
     packages=['django_cached_counts'],
     package_dir={"": "."},
     package_data={},
-    install_requires=['django==2.*,>=2.2.0'],
+    install_requires=['django>=2,<4'],
 )
