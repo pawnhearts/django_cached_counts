@@ -1,5 +1,7 @@
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.apps import apps
+
 
 from django.db.models.signals import m2m_changed, post_save, post_delete
 
@@ -36,11 +38,13 @@ class CachedCount(object):
             qs = self.expr
         if self.filter:
             qs = qs.filter(self.filter)
+        # qs._lookup_joins - should invalidate too
         res = qs.count()
         cache.set(self.name, res, timeout=self.timeout)
         return res
 
     def contribute_to_class(self, cls, field_name):
+        self.cls = cls
         self.name = f'{repr(cls)}_{repr(self.expr)}_{repr(self.filter)}'
         m2m = False
 
