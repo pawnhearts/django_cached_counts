@@ -1,6 +1,6 @@
 [project]
 name = "django_cached_counts"
-version = "0.2.0"
+version = "0.2.1"
 description = "Caching count() rqueries"
 readme = "README.md"
 authors = [
@@ -16,7 +16,7 @@ dependencies = [
 ]
 [tool.poetry]
 name = "django_cached_counts"
-version = "0.2.0"
+version = "0.2.1"
 description = "Caching count() in django models"
 authors = ["ph <robotnaoborot@gmail.com>"]
 license = "MIT"
