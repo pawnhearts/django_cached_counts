@@ -1,4 +1,6 @@
 from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
 from django.db.models.signals import m2m_changed, post_save, post_delete
 
 
@@ -17,12 +19,13 @@ class CachedCount(object):
 
     Those counts would be cached and invalidated when models Foo or User are saved/deleted
     """
-    def __init__(self, expr, filter=None):
+    def __init__(self, expr, filter=None, timeout=DEFAULT_TIMEOUT):
         self.expr = expr
         self.filter = filter
         self.name = None
         self.model = None
         self.m2m = False
+        self.timeout = timeout
 
     def __get__(self, obj, objtype):
         if self.name in cache:
@@ -34,7 +37,7 @@ class CachedCount(object):
         if self.filter:
             qs = qs.filter(self.filter)
         res = qs.count()
-        cache.set(self.name, res)
+        cache.set(self.name, res, timeout=self.timeout)
         return res
 
     def contribute_to_class(self, cls, field_name):
