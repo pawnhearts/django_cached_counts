@@ -35,8 +35,6 @@ class CachedCount(object):
         self.also_invalidate_on = also_invalidate_on or []
 
     def __get__(self, obj, objtype):
-        if self.name in cache:
-            return cache.get(self.name)
         if isinstance(self.expr, str):
             qs = getattr(obj, self.expr)
         else:
@@ -44,14 +42,18 @@ class CachedCount(object):
         if self.filter:
             qs = qs.filter(self.filter)
         # qs._lookup_joins - should invalidate too
-        res = qs.count()
-        cache.set(self.name, res, timeout=self.timeout)
-        return res
+        sql = str(qs.query)
+        d = cache.get(self.name, {}) if self.name in cache else {}
+        # not too safe :-(
+        if sql in d:
+            return d[sql]
+        d[sql] = qs.count()
+        cache.set(self.name, d, timeout=self.timeout)
+        return d[sql]
 
     def contribute_to_class(self, cls, field_name):
-        self.cls = cls
-        self.name = f'{repr(cls)}_{repr(self.expr)}_{repr(self.filter)}'
-        # that's wrong lol ^^
+        # self.cls = cls
+        self.name = f'{cls.__name__}_{field_name}'
         signals = []
 
         if isinstance(self.expr, str):
