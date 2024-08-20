@@ -1,10 +1,26 @@
+[project]
+name = "django_cached_counts"
+version = "0.2.0"
+description = "Caching count() rqueries"
+readme = "README.md"
+authors = [
+  {name = "pawnhearts", email = "robotnaoborot@gmail.com"}
+]
+maintainers = [
+  {name = "pawnhearts", email = "robotnaoborot@gmail.com"}
+]
+
+license = {text = "MIT license"}
+dependencies = [
+  
+]
 [tool.poetry]
 name = "django_cached_counts"
 version = "0.2.0"
 description = "Caching count() in django models"
 authors = ["ph <robotnaoborot@gmail.com>"]
 license = "MIT"
-readme = "README.rst"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -19,7 +35,7 @@ build-backend = "poetry.masonry.api"
 
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {"" = "."}
 
 [project.urls]
 bugs = "https://github.com/pawnhearts/django_cached_counts/issues"
